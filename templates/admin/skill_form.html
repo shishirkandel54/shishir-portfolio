@@ -1,0 +1,206 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} - Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ title }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('admin.skills') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Back to Skills
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">Skill Details</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.name.label(class="form-label") }}
+                                {{ form.name(class="form-control") }}
+                                {% if form.name.errors %}
+                                    <div class="text-danger small">{{ form.name.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.category.label(class="form-label") }}
+                                {{ form.category(class="form-select") }}
+                                {% if form.category.errors %}
+                                    <div class="text-danger small">{{ form.category.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.icon_class.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-icons"></i>
+                                    </span>
+                                    {{ form.icon_class(class="form-control", placeholder="e.g., fab fa-photoshop") }}
+                                </div>
+                                {% if form.icon_class.errors %}
+                                    <div class="text-danger small">{{ form.icon_class.errors[0] }}</div>
+                                {% endif %}
+                                <small class="form-text text-muted">Use Font Awesome classes like "fab fa-photoshop" or "fas fa-paint-brush"</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.color.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-palette"></i>
+                                    </span>
+                                    {{ form.color(class="form-control", type="color") }}
+                                </div>
+                                {% if form.color.errors %}
+                                    <div class="text-danger small">{{ form.color.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.proficiency.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-percentage"></i>
+                                    </span>
+                                    {{ form.proficiency(class="form-control", min="0", max="100") }}
+                                    <span class="input-group-text">%</span>
+                                </div>
+                                {% if form.proficiency.errors %}
+                                    <div class="text-danger small">{{ form.proficiency.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.order_index.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-sort-numeric-up"></i>
+                                    </span>
+                                    {{ form.order_index(class="form-control") }}
+                                </div>
+                                {% if form.order_index.errors %}
+                                    <div class="text-danger small">{{ form.order_index.errors[0] }}</div>
+                                {% endif %}
+                                <small class="form-text text-muted">Lower numbers appear first</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            {{ form.is_active(class="form-check-input") }}
+                            {{ form.is_active.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ url_for('admin.skills') }}" class="btn btn-secondary">Cancel</a>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-info">Preview</h6>
+            </div>
+            <div class="card-body">
+                <div class="skill-preview">
+                    <div class="d-flex align-items-center mb-2">
+                        <i id="preview-icon" class="fas fa-code me-2" style="color: #8b5cf6;"></i>
+                        <span id="preview-name">Skill Name</span>
+                    </div>
+                    <div class="progress mb-2" style="height: 20px;">
+                        <div id="preview-bar" class="progress-bar" style="width: 80%; background-color: #8b5cf6;">
+                            <span id="preview-percentage">80%</span>
+                        </div>
+                    </div>
+                    <small class="text-muted">Category: <span id="preview-category">Design Software</span></small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-success">Icon Reference</h6>
+            </div>
+            <div class="card-body">
+                <small class="text-muted">
+                    <strong>Popular Icons:</strong><br>
+                    <code>fab fa-photoshop</code> - Photoshop<br>
+                    <code>fab fa-figma</code> - Figma<br>
+                    <code>fab fa-sketch</code> - Sketch<br>
+                    <code>fas fa-paint-brush</code> - General Design<br>
+                    <code>fas fa-code</code> - Programming<br>
+                    <code>fas fa-palette</code> - Art/Design
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Live preview functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.querySelector('input[name="name"]');
+    const iconInput = document.querySelector('input[name="icon_class"]');
+    const colorInput = document.querySelector('input[name="color"]');
+    const proficiencyInput = document.querySelector('input[name="proficiency"]');
+    const categorySelect = document.querySelector('select[name="category"]');
+    
+    const previewName = document.getElementById('preview-name');
+    const previewIcon = document.getElementById('preview-icon');
+    const previewBar = document.getElementById('preview-bar');
+    const previewPercentage = document.getElementById('preview-percentage');
+    const previewCategory = document.getElementById('preview-category');
+    
+    function updatePreview() {
+        if (nameInput.value) previewName.textContent = nameInput.value;
+        if (iconInput.value) previewIcon.className = iconInput.value + ' me-2';
+        if (colorInput.value) {
+            previewIcon.style.color = colorInput.value;
+            previewBar.style.backgroundColor = colorInput.value;
+        }
+        if (proficiencyInput.value) {
+            previewBar.style.width = proficiencyInput.value + '%';
+            previewPercentage.textContent = proficiencyInput.value + '%';
+        }
+        if (categorySelect.value) previewCategory.textContent = categorySelect.value;
+    }
+    
+    nameInput.addEventListener('input', updatePreview);
+    iconInput.addEventListener('input', updatePreview);
+    colorInput.addEventListener('input', updatePreview);
+    proficiencyInput.addEventListener('input', updatePreview);
+    categorySelect.addEventListener('change', updatePreview);
+    
+    // Initialize preview with current values
+    updatePreview();
+});
+</script>
+{% endblock %}

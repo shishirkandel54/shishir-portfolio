@@ -1,0 +1,388 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Site Settings{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">
+        <i class="fas fa-cog me-2"></i>Site Settings
+    </h1>
+    <a href="{{ url_for('index') }}" target="_blank" class="btn btn-outline-primary">
+        <i class="fas fa-external-link-alt me-2"></i>Preview Website
+    </a>
+</div>
+
+<form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- General Settings -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-globe me-2"></i>General Website Settings
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="site_title" class="form-label">
+                                <i class="fas fa-heading me-1"></i>Site Title
+                            </label>
+                            <input type="text" class="form-control" id="site_title" name="site_title" 
+                                   value="{{ configs.get('site_title', 'Shishir - Creative Designer') }}" 
+                                   placeholder="Your website title">
+                            <small class="text-muted">Appears in browser tab and search results</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="hero_title" class="form-label">
+                                <i class="fas fa-star me-1"></i>Hero Title
+                            </label>
+                            <input type="text" class="form-control" id="hero_title" name="hero_title" 
+                                   value="{{ configs.get('hero_title', 'Creative Designer') }}" 
+                                   placeholder="Main headline">
+                            <small class="text-muted">Large text on homepage hero section</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="site_description" class="form-label">
+                            <i class="fas fa-align-left me-1"></i>Site Description
+                        </label>
+                        <textarea class="form-control" id="site_description" name="site_description" rows="3" 
+                                  placeholder="Brief description of your services and expertise">{{ configs.get('site_description', 'Professional creative designer specializing in UI/UX and brand identity') }}</textarea>
+                        <small class="text-muted">Used for SEO and social media previews</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="hero_subtitle" class="form-label">
+                            <i class="fas fa-quote-left me-1"></i>Hero Subtitle
+                        </label>
+                        <textarea class="form-control" id="hero_subtitle" name="hero_subtitle" rows="2" 
+                                  placeholder="Engaging subtitle that describes your work">{{ configs.get('hero_subtitle', 'Transforming ideas into stunning visual experiences') }}</textarea>
+                        <small class="text-muted">Appears below the main hero title</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-address-book me-2"></i>Contact Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="contact_email" class="form-label">
+                                <i class="fas fa-envelope me-1"></i>Contact Email
+                            </label>
+                            <input type="email" class="form-control" id="contact_email" name="contact_email" 
+                                   value="{{ configs.get('contact_email', 'hello@shishir.design') }}" 
+                                   placeholder="your@email.com">
+                            <small class="text-muted">Displayed on contact page and used for replies</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="contact_phone" class="form-label">
+                                <i class="fas fa-phone me-1"></i>Contact Phone
+                            </label>
+                            <input type="tel" class="form-control" id="contact_phone" name="contact_phone" 
+                                   value="{{ configs.get('contact_phone', '+1 (555) 123-4567') }}" 
+                                   placeholder="+1 (555) 123-4567">
+                            <small class="text-muted">Shown on contact page</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="contact_location" class="form-label">
+                            <i class="fas fa-map-marker-alt me-1"></i>Location/Availability
+                        </label>
+                        <input type="text" class="form-control" id="contact_location" name="contact_location" 
+                               value="{{ configs.get('contact_location', 'Available for remote work worldwide') }}" 
+                               placeholder="Your location or availability">
+                        <small class="text-muted">Location information for potential clients</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Social Media Links -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-share-alt me-2"></i>Social Media Links
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="social_linkedin" class="form-label">
+                                <i class="fab fa-linkedin me-1"></i>LinkedIn Profile
+                            </label>
+                            <input type="url" class="form-control" id="social_linkedin" name="social_linkedin" 
+                                   value="{{ configs.get('social_linkedin', '#') }}" 
+                                   placeholder="https://linkedin.com/in/yourprofile">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="social_behance" class="form-label">
+                                <i class="fab fa-behance me-1"></i>Behance Portfolio
+                            </label>
+                            <input type="url" class="form-control" id="social_behance" name="social_behance" 
+                                   value="{{ configs.get('social_behance', '#') }}" 
+                                   placeholder="https://behance.net/yourprofile">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="social_dribbble" class="form-label">
+                                <i class="fab fa-dribbble me-1"></i>Dribbble Profile
+                            </label>
+                            <input type="url" class="form-control" id="social_dribbble" name="social_dribbble" 
+                                   value="{{ configs.get('social_dribbble', '#') }}" 
+                                   placeholder="https://dribbble.com/yourprofile">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="social_instagram" class="form-label">
+                                <i class="fab fa-instagram me-1"></i>Instagram
+                            </label>
+                            <input type="url" class="form-control" id="social_instagram" name="social_instagram" 
+                                   value="{{ configs.get('social_instagram', '#') }}" 
+                                   placeholder="https://instagram.com/yourprofile">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="social_github" class="form-label">
+                                <i class="fab fa-github me-1"></i>GitHub Profile
+                            </label>
+                            <input type="url" class="form-control" id="social_github" name="social_github" 
+                                   value="{{ configs.get('social_github', '#') }}" 
+                                   placeholder="https://github.com/yourprofile">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="social_twitter" class="form-label">
+                                <i class="fab fa-twitter me-1"></i>Twitter/X
+                            </label>
+                            <input type="url" class="form-control" id="social_twitter" name="social_twitter" 
+                                   value="{{ configs.get('social_twitter', '#') }}" 
+                                   placeholder="https://twitter.com/yourprofile">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Save Button -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-save me-2"></i>Save All Settings
+                </button>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <!-- Settings Preview -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-eye me-2"></i>Settings Preview
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="preview-section mb-3">
+                        <h6 class="text-primary">Homepage Hero Section</h6>
+                        <div class="bg-light p-3 rounded">
+                            <h4 id="preview-hero-title">{{ configs.get('hero_title', 'Creative Designer') }}</h4>
+                            <p class="text-muted" id="preview-hero-subtitle">{{ configs.get('hero_subtitle', 'Transforming ideas into stunning visual experiences') }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-section mb-3">
+                        <h6 class="text-primary">Browser Tab</h6>
+                        <div class="bg-light p-2 rounded small">
+                            <i class="fas fa-globe me-1"></i>
+                            <span id="preview-site-title">{{ configs.get('site_title', 'Shishir - Creative Designer') }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-section">
+                        <h6 class="text-primary">Contact Information</h6>
+                        <div class="bg-light p-3 rounded">
+                            <div class="mb-2">
+                                <i class="fas fa-envelope me-2"></i>
+                                <span id="preview-contact-email">{{ configs.get('contact_email', 'hello@shishir.design') }}</span>
+                            </div>
+                            <div class="mb-2">
+                                <i class="fas fa-phone me-2"></i>
+                                <span id="preview-contact-phone">{{ configs.get('contact_phone', '+1 (555) 123-4567') }}</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                <span id="preview-contact-location">{{ configs.get('contact_location', 'Available for remote work worldwide') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SEO Tips -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-search me-2"></i>SEO & Best Practices
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6><i class="fas fa-heading text-primary me-1"></i>Title Guidelines</h6>
+                        <small class="text-muted">
+                            Keep site title under 60 characters for optimal search results display. 
+                            Include your name and main service.
+                        </small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-align-left text-success me-1"></i>Description Tips</h6>
+                        <small class="text-muted">
+                            Write 150-160 characters describing your services. This appears in 
+                            search results and social media shares.
+                        </small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6><i class="fas fa-share-alt text-info me-1"></i>Social Links</h6>
+                        <small class="text-muted">
+                            Add your professional profiles to build credibility and provide 
+                            multiple ways for clients to connect with you.
+                        </small>
+                    </div>
+                    
+                    <div>
+                        <h6><i class="fas fa-mobile-alt text-warning me-1"></i>Responsive Design</h6>
+                        <small class="text-muted">
+                            Your settings automatically adapt to mobile, tablet, and desktop views 
+                            for optimal user experience across all devices.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- System Information -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>System Info
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <strong>Admin User:</strong>
+                        <span class="text-muted">admin</span>
+                    </div>
+                    <div class="mb-2">
+                        <strong>Database:</strong>
+                        <span class="badge bg-success">Connected</span>
+                    </div>
+                    <div class="mb-2">
+                        <strong>File Uploads:</strong>
+                        <span class="badge bg-success">Enabled</span>
+                    </div>
+                    <div class="mb-2">
+                        <strong>CSRF Protection:</strong>
+                        <span class="badge bg-success">Active</span>
+                    </div>
+                    <div>
+                        <strong>Responsive Design:</strong>
+                        <span class="badge bg-success">Mobile Ready</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Live preview updates
+    function updatePreviews() {
+        // Update hero title preview
+        const heroTitle = document.getElementById('hero_title').value || 'Creative Designer';
+        document.getElementById('preview-hero-title').textContent = heroTitle;
+        
+        // Update hero subtitle preview
+        const heroSubtitle = document.getElementById('hero_subtitle').value || 'Transforming ideas into stunning visual experiences';
+        document.getElementById('preview-hero-subtitle').textContent = heroSubtitle;
+        
+        // Update site title preview
+        const siteTitle = document.getElementById('site_title').value || 'Shishir - Creative Designer';
+        document.getElementById('preview-site-title').textContent = siteTitle;
+        
+        // Update contact information preview
+        const contactEmail = document.getElementById('contact_email').value || 'hello@shishir.design';
+        document.getElementById('preview-contact-email').textContent = contactEmail;
+        
+        const contactPhone = document.getElementById('contact_phone').value || '+1 (555) 123-4567';
+        document.getElementById('preview-contact-phone').textContent = contactPhone;
+        
+        const contactLocation = document.getElementById('contact_location').value || 'Available for remote work worldwide';
+        document.getElementById('preview-contact-location').textContent = contactLocation;
+    }
+    
+    // Add event listeners for live preview
+    document.addEventListener('DOMContentLoaded', function() {
+        const previewFields = [
+            'hero_title', 'hero_subtitle', 'site_title', 
+            'contact_email', 'contact_phone', 'contact_location'
+        ];
+        
+        previewFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.addEventListener('input', updatePreviews);
+            }
+        });
+        
+        // Initial preview update
+        updatePreviews();
+    });
+    
+    // Form submission feedback
+    document.querySelector('form').addEventListener('submit', function() {
+        const submitBtn = document.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+        submitBtn.disabled = true;
+        
+        // Re-enable after a delay (form will redirect anyway)
+        setTimeout(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }, 3000);
+    });
+    
+    // Social media link validation
+    function validateSocialLinks() {
+        const socialFields = document.querySelectorAll('input[name^="social_"]');
+        
+        socialFields.forEach(field => {
+            field.addEventListener('blur', function() {
+                const value = this.value.trim();
+                if (value && value !== '#' && !value.startsWith('http')) {
+                    this.value = 'https://' + value;
+                }
+            });
+        });
+    }
+    
+    // Initialize social link validation
+    document.addEventListener('DOMContentLoaded', validateSocialLinks);
+</script>
+{% endblock %}

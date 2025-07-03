@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Shishir - Creative Designer & UI/UX Expert{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-background">
+        <div class="animated-grid"></div>
+        <div class="floating-elements">
+            <div class="floating-element" data-speed="2">
+                <img src="{{ url_for('static', filename='images/design-tools-toolbar.png') }}" alt="Design Tools" class="floating-image">
+            </div>
+            <div class="floating-element" data-speed="3">
+                <img src="{{ url_for('static', filename='images/figma-app-icon.png') }}" alt="Figma App" class="floating-image">
+            </div>
+            <div class="floating-element" data-speed="1.5">
+                <img src="{{ url_for('static', filename='images/blue-creative-blob.png') }}" alt="Creative Blob" class="floating-image">
+            </div>
+            <div class="floating-element" data-speed="2.5">
+                <img src="{{ url_for('static', filename='images/design-toolbar-dark.png') }}" alt="Design Toolbar" class="floating-image">
+            </div>
+            <div class="floating-element grid-pattern" data-speed="0.8">
+                <img src="{{ url_for('static', filename='images/blue-grid-pattern.png') }}" alt="Grid Pattern" class="floating-image pattern-bg">
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="row min-vh-100 align-items-center">
+            <div class="col-lg-6 col-md-8 col-12">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span class="text-gradient">Creative Designer</span><br>
+                        <span class="typing-text"></span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Transforming ideas into stunning visual experiences through innovative design, 
+                        user-centered interfaces, and creative storytelling.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#portfolio" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-eye me-2"></i>View Portfolio
+                        </a>
+                        <a href="{{ url_for('contact') }}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-envelope me-2"></i>Get In Touch
+                        </a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="50">0</span>
+                            <span class="stat-label">Projects Completed</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="25">0</span>
+                            <span class="stat-label">Happy Clients</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="3">0</span>
+                            <span class="stat-label">Years Experience</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-4 col-12">
+                <div class="hero-visual">
+                    <div class="design-showcase">
+                        <img src="{{ url_for('static', filename='images/design-toolbar.png') }}" alt="Design Interface" class="main-design-image">
+                        <div class="orbit-elements">
+                            <div class="orbit-item orbit-1">
+                                <i class="fab fa-figma"></i>
+                            </div>
+                            <div class="orbit-item orbit-2">
+                                <i class="fab fa-adobe"></i>
+                            </div>
+                            <div class="orbit-item orbit-3">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills Section -->
+<section id="skills" class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="section-title">Design Expertise</h2>
+                <p class="section-subtitle">
+                    Proficient in modern design tools and methodologies to deliver exceptional results
+                </p>
+            </div>
+        </div>
+        <div class="row" id="skills-container">
+            <!-- Skills will be loaded via JavaScript -->
+        </div>
+    </div>
+</section>
+
+<!-- Portfolio Preview -->
+<section id="portfolio" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="section-title">Featured Work</h2>
+                <p class="section-subtitle">
+                    A showcase of recent projects and creative solutions
+                </p>
+            </div>
+        </div>
+        <div class="row" id="portfolio-container">
+            <!-- Portfolio items will be loaded via JavaScript -->
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('portfolio') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-arrow-right me-2"></i>View All Projects
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="about-image">
+                    <img src="{{ url_for('static', filename='images/grid-pattern.png') }}" alt="Design Process" class="img-fluid rounded shadow">
+                    <div class="about-overlay">
+                        <div class="about-badge">
+                            <i class="fas fa-award"></i>
+                            <span>Award Winning</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-content">
+                    <h2 class="section-title mb-4">About My Work</h2>
+                    <p class="mb-4">
+                        I'm a passionate creative designer with expertise in UI/UX design, brand identity, 
+                        and digital experiences. My approach combines user-centered design principles with 
+                        innovative visual storytelling.
+                    </p>
+                    <div class="about-features">
+                        <div class="feature-item">
+                            <i class="fas fa-lightbulb text-primary"></i>
+                            <div>
+                                <h5>Creative Solutions</h5>
+                                <p>Innovative approaches to complex design challenges</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-users text-primary"></i>
+                            <div>
+                                <h5>User-Centered Design</h5>
+                                <p>Focus on user experience and accessibility</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-rocket text-primary"></i>
+                            <div>
+                                <h5>Modern Techniques</h5>
+                                <p>Latest design trends and technologies</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="mb-4">Ready to Start Your Project?</h2>
+                <p class="lead mb-4">
+                    Let's collaborate to bring your creative vision to life with exceptional design
+                </p>
+                <a href="{{ url_for('contact') }}" class="btn btn-light btn-lg">
+                    <i class="fas fa-rocket me-2"></i>Start a Project
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+{% endblock %}

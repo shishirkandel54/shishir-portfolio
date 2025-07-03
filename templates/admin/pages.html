@@ -1,0 +1,190 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Pages - Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Pages</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{{ url_for('admin.new_page') }}" class="btn btn-sm btn-primary">
+                <i class="fas fa-plus me-1"></i>New Page
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Search Form -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <form method="GET" class="d-flex">
+            <input type="text" name="search" value="{{ search }}" class="form-control me-2" placeholder="Search pages...">
+            <button type="submit" class="btn btn-outline-secondary">
+                <i class="fas fa-search"></i>
+            </button>
+            {% if search %}
+            <a href="{{ url_for('admin.pages') }}" class="btn btn-outline-secondary ms-2">
+                <i class="fas fa-times"></i>
+            </a>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<!-- Pages Table -->
+<div class="card shadow">
+    <div class="card-body">
+        {% if pages.items %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Slug</th>
+                        <th>Status</th>
+                        <th>Featured</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for page in pages.items %}
+                    <tr>
+                        <td>
+                            <strong>{{ page.title }}</strong>
+                            {% if page.meta_description %}
+                            <br><small class="text-muted">{{ page.meta_description[:100] }}...</small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <code>{{ page.slug }}</code>
+                        </td>
+                        <td>
+                            {% if page.is_published %}
+                            <span class="badge bg-success">Published</span>
+                            {% else %}
+                            <span class="badge bg-secondary">Draft</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if page.is_featured %}
+                            <i class="fas fa-star text-warning"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <small>{{ page.created_at.strftime('%Y-%m-%d') }}</small>
+                        </td>
+                        <td>
+                            <small>{{ page.updated_at.strftime('%Y-%m-%d') }}</small>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                {% if page.is_published %}
+                                <a href="{{ url_for('main.page', slug=page.slug) }}" 
+                                   class="btn btn-outline-info" target="_blank" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                {% endif %}
+                                <a href="{{ url_for('admin.edit_page', page_id=page.id) }}" 
+                                   class="btn btn-outline-primary" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button" class="btn btn-outline-danger" 
+                                        title="Delete" onclick="deletePage({{ page.id }}, '{{ page.title }}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        {% if pages.pages > 1 %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if pages.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('admin.pages', page=pages.prev_num, search=search) }}">Previous</a>
+                </li>
+                {% endif %}
+                
+                {% for page_num in pages.iter_pages() %}
+                    {% if page_num %}
+                        {% if page_num != pages.page %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('admin.pages', page=page_num, search=search) }}">{{ page_num }}</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% endif %}
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if pages.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('admin.pages', page=pages.next_num, search=search) }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        
+        {% else %}
+        <div class="text-center text-muted py-5">
+            <i class="fas fa-file-alt fa-3x mb-3"></i>
+            <h5>No pages found</h5>
+            {% if search %}
+            <p>No pages match your search criteria.</p>
+            <a href="{{ url_for('admin.pages') }}" class="btn btn-outline-secondary">Clear Search</a>
+            {% else %}
+            <p>Create your first page to get started.</p>
+            <a href="{{ url_for('admin.new_page') }}" class="btn btn-primary">Create Page</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the page "<span id="pageTitle"></span>"?</p>
+                <p class="text-muted">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function deletePage(pageId, pageTitle) {
+    document.getElementById('pageTitle').textContent = pageTitle;
+    document.getElementById('deleteForm').action = '{{ url_for("admin.delete_page", page_id=0) }}'.replace('0', pageId);
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>
+{% endblock %}

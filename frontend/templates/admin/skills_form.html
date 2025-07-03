@@ -1,0 +1,355 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ 'Edit' if skill else 'Add' }} Skill{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">
+        <i class="fas fa-{{ 'edit' if skill else 'plus' }} me-2"></i>
+        {{ 'Edit' if skill else 'Add New' }} Skill
+    </h1>
+    <a href="{{ url_for('admin_skills') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Skills
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Skill Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label for="name" class="form-label">
+                                <i class="fas fa-tag me-1"></i>Skill Name *
+                            </label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   value="{{ skill.name if skill else '' }}" 
+                                   placeholder="e.g., Adobe Photoshop, UI/UX Design" required>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label for="category" class="form-label">
+                                <i class="fas fa-folder me-1"></i>Category *
+                            </label>
+                            <select class="form-control" id="category" name="category" required>
+                                <option value="">Select category...</option>
+                                <option value="Design Software" {{ 'selected' if skill and skill.category == 'Design Software' else '' }}>Design Software</option>
+                                <option value="Design Specializations" {{ 'selected' if skill and skill.category == 'Design Specializations' else '' }}>Design Specializations</option>
+                                <option value="Additional Skills" {{ 'selected' if skill and skill.category == 'Additional Skills' else '' }}>Additional Skills</option>
+                                <option value="Technical Skills" {{ 'selected' if skill and skill.category == 'Technical Skills' else '' }}>Technical Skills</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="icon_class" class="form-label">
+                                <i class="fas fa-icons me-1"></i>Icon Class
+                            </label>
+                            <input type="text" class="form-control" id="icon_class" name="icon_class" 
+                                   value="{{ skill.icon_class if skill else '' }}" 
+                                   placeholder="e.g., fab fa-figma, fas fa-paint-brush">
+                            <small class="text-muted">
+                                Use <a href="https://fontawesome.com/icons" target="_blank">Font Awesome</a> classes
+                            </small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="color" class="form-label">
+                                <i class="fas fa-palette me-1"></i>Color
+                            </label>
+                            <div class="input-group">
+                                <input type="color" class="form-control form-control-color" id="color" name="color" 
+                                       value="{{ skill.color if skill else '#8b5cf6' }}" title="Choose color">
+                                <input type="text" class="form-control" id="color_text" 
+                                       value="{{ skill.color if skill else '#8b5cf6' }}" 
+                                       placeholder="#8b5cf6">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="proficiency" class="form-label">
+                                <i class="fas fa-percentage me-1"></i>Proficiency Level
+                            </label>
+                            <div class="input-group">
+                                <input type="range" class="form-range" id="proficiency" name="proficiency" 
+                                       min="0" max="100" step="5" 
+                                       value="{{ skill.proficiency if skill else 80 }}">
+                                <span class="input-group-text" id="proficiency-value">
+                                    {{ skill.proficiency if skill else 80 }}%
+                                </span>
+                            </div>
+                            <small class="text-muted">Drag to adjust proficiency level</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="order_index" class="form-label">
+                                <i class="fas fa-sort-numeric-down me-1"></i>Display Order
+                            </label>
+                            <input type="number" class="form-control" id="order_index" name="order_index" 
+                                   value="{{ skill.order_index if skill else 0 }}" 
+                                   min="0" max="100">
+                            <small class="text-muted">Lower numbers appear first within category</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="is_active" name="is_active" 
+                                   {{ 'checked' if not skill or skill.is_active else '' }}>
+                            <label class="form-check-label" for="is_active">
+                                <strong>Active Skill</strong>
+                                <small class="text-muted d-block">Display this skill on the website</small>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('admin_skills') }}" class="btn btn-secondary">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>{{ 'Update' if skill else 'Create' }} Skill
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Preview Card -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-eye me-2"></i>Live Preview
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="skillPreview" class="text-center">
+                    <div class="skill-icon mx-auto mb-3" id="previewIcon" 
+                         style="width: 60px; height: 60px; background: {{ skill.color if skill else '#8b5cf6' }}; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
+                        <i class="{{ skill.icon_class if skill else 'fas fa-tools' }}" id="previewIconClass"></i>
+                    </div>
+                    <h6 id="previewName">{{ skill.name if skill else 'Skill Name' }}</h6>
+                    <div class="progress mb-2" style="height: 8px;">
+                        <div class="progress-bar" id="previewProgress" 
+                             style="width: {{ skill.proficiency if skill else 80 }}%; background: {{ skill.color if skill else '#8b5cf6' }}"></div>
+                    </div>
+                    <small class="text-muted">
+                        <span id="previewProficiency">{{ skill.proficiency if skill else 80 }}</span>% Proficiency
+                    </small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Icon Reference -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-icons me-2"></i>Popular Icons
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-4 mb-2">
+                        <div class="icon-sample" data-icon="fab fa-figma">
+                            <i class="fab fa-figma fa-lg"></i>
+                            <small class="d-block">Figma</small>
+                        </div>
+                    </div>
+                    <div class="col-4 mb-2">
+                        <div class="icon-sample" data-icon="fab fa-adobe">
+                            <i class="fab fa-adobe fa-lg"></i>
+                            <small class="d-block">Adobe</small>
+                        </div>
+                    </div>
+                    <div class="col-4 mb-2">
+                        <div class="icon-sample" data-icon="fas fa-paint-brush">
+                            <i class="fas fa-paint-brush fa-lg"></i>
+                            <small class="d-block">Design</small>
+                        </div>
+                    </div>
+                    <div class="col-4 mb-2">
+                        <div class="icon-sample" data-icon="fas fa-palette">
+                            <i class="fas fa-palette fa-lg"></i>
+                            <small class="d-block">Art</small>
+                        </div>
+                    </div>
+                    <div class="col-4 mb-2">
+                        <div class="icon-sample" data-icon="fas fa-code">
+                            <i class="fas fa-code fa-lg"></i>
+                            <small class="d-block">Code</small>
+                        </div>
+                    </div>
+                    <div class="col-4 mb-2">
+                        <div class="icon-sample" data-icon="fas fa-mobile-alt">
+                            <i class="fas fa-mobile-alt fa-lg"></i>
+                            <small class="d-block">Mobile</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Color Presets -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-palette me-2"></i>Color Presets
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-2">
+                    <div class="color-preset" data-color="#8b5cf6" style="width: 30px; height: 30px; background: #8b5cf6; border-radius: 4px; cursor: pointer;" title="Purple"></div>
+                    <div class="color-preset" data-color="#3b82f6" style="width: 30px; height: 30px; background: #3b82f6; border-radius: 4px; cursor: pointer;" title="Blue"></div>
+                    <div class="color-preset" data-color="#10b981" style="width: 30px; height: 30px; background: #10b981; border-radius: 4px; cursor: pointer;" title="Green"></div>
+                    <div class="color-preset" data-color="#f59e0b" style="width: 30px; height: 30px; background: #f59e0b; border-radius: 4px; cursor: pointer;" title="Orange"></div>
+                    <div class="color-preset" data-color="#ef4444" style="width: 30px; height: 30px; background: #ef4444; border-radius: 4px; cursor: pointer;" title="Red"></div>
+                    <div class="color-preset" data-color="#ec4899" style="width: 30px; height: 30px; background: #ec4899; border-radius: 4px; cursor: pointer;" title="Pink"></div>
+                    <div class="color-preset" data-color="#8b5a3c" style="width: 30px; height: 30px; background: #8b5a3c; border-radius: 4px; cursor: pointer;" title="Brown"></div>
+                    <div class="color-preset" data-color="#6b7280" style="width: 30px; height: 30px; background: #6b7280; border-radius: 4px; cursor: pointer;" title="Gray"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Live preview updates
+    function updatePreview() {
+        const name = document.getElementById('name').value || 'Skill Name';
+        const iconClass = document.getElementById('icon_class').value || 'fas fa-tools';
+        const color = document.getElementById('color').value || '#8b5cf6';
+        const proficiency = document.getElementById('proficiency').value || 80;
+        
+        document.getElementById('previewName').textContent = name;
+        document.getElementById('previewIconClass').className = iconClass;
+        document.getElementById('previewIcon').style.background = color;
+        document.getElementById('previewProgress').style.width = proficiency + '%';
+        document.getElementById('previewProgress').style.background = color;
+        document.getElementById('previewProficiency').textContent = proficiency;
+        
+        // Update color text input
+        document.getElementById('color_text').value = color;
+    }
+    
+    // Proficiency slider update
+    function updateProficiencyDisplay() {
+        const value = document.getElementById('proficiency').value;
+        document.getElementById('proficiency-value').textContent = value + '%';
+        updatePreview();
+    }
+    
+    // Color input synchronization
+    function syncColorInputs() {
+        const colorPicker = document.getElementById('color');
+        const colorText = document.getElementById('color_text');
+        
+        colorPicker.addEventListener('input', function() {
+            colorText.value = this.value;
+            updatePreview();
+        });
+        
+        colorText.addEventListener('input', function() {
+            if (/^#[0-9A-F]{6}$/i.test(this.value)) {
+                colorPicker.value = this.value;
+                updatePreview();
+            }
+        });
+    }
+    
+    // Icon selection
+    function setupIconSelection() {
+        document.querySelectorAll('.icon-sample').forEach(sample => {
+            sample.style.cursor = 'pointer';
+            sample.style.padding = '8px';
+            sample.style.borderRadius = '4px';
+            sample.style.transition = 'background-color 0.2s';
+            
+            sample.addEventListener('click', function() {
+                const iconClass = this.getAttribute('data-icon');
+                document.getElementById('icon_class').value = iconClass;
+                updatePreview();
+                
+                // Visual feedback
+                document.querySelectorAll('.icon-sample').forEach(s => s.style.backgroundColor = '');
+                this.style.backgroundColor = '#e2e8f0';
+            });
+            
+            sample.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#f1f5f9';
+            });
+            
+            sample.addEventListener('mouseleave', function() {
+                if (document.getElementById('icon_class').value !== this.getAttribute('data-icon')) {
+                    this.style.backgroundColor = '';
+                }
+            });
+        });
+    }
+    
+    // Color preset selection
+    function setupColorPresets() {
+        document.querySelectorAll('.color-preset').forEach(preset => {
+            preset.addEventListener('click', function() {
+                const color = this.getAttribute('data-color');
+                document.getElementById('color').value = color;
+                document.getElementById('color_text').value = color;
+                updatePreview();
+                
+                // Visual feedback
+                document.querySelectorAll('.color-preset').forEach(p => p.style.border = '2px solid transparent');
+                this.style.border = '2px solid #374151';
+            });
+        });
+    }
+    
+    // Initialize everything
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add event listeners
+        ['name', 'icon_class'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updatePreview);
+        });
+        
+        document.getElementById('proficiency').addEventListener('input', updateProficiencyDisplay);
+        
+        // Setup components
+        syncColorInputs();
+        setupIconSelection();
+        setupColorPresets();
+        
+        // Initial preview update
+        updatePreview();
+        updateProficiencyDisplay();
+    });
+</script>
+
+<style>
+.icon-sample:hover {
+    background-color: #f1f5f9 !important;
+}
+
+.color-preset {
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.color-preset:hover {
+    border-color: #d1d5db !important;
+}
+</style>
+{% endblock %}

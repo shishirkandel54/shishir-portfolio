@@ -1,0 +1,331 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Contact Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">
+        <i class="fas fa-envelope me-2"></i>Contact Management
+    </h1>
+    <div class="d-flex gap-2">
+        <span class="badge bg-warning">{{ contacts|selectattr('is_read', 'equalto', false)|list|length }} Unread</span>
+        <span class="badge bg-info">{{ contacts|length }} Total</span>
+    </div>
+</div>
+
+<!-- Contact Statistics -->
+<div class="row mb-4">
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="card-title">{{ contacts|length }}</h4>
+                        <p class="card-text">Total Messages</p>
+                    </div>
+                    <i class="fas fa-envelope fa-2x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="card-title">{{ contacts|selectattr('is_read', 'equalto', false)|list|length }}</h4>
+                        <p class="card-text">Unread Messages</p>
+                    </div>
+                    <i class="fas fa-envelope-open fa-2x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="card-title">{{ contacts|selectattr('is_read', 'equalto', true)|list|length }}</h4>
+                        <p class="card-text">Read Messages</p>
+                    </div>
+                    <i class="fas fa-check-circle fa-2x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="card-title">{{ (contacts|selectattr('created_at')|list|length) if contacts else 0 }}</h4>
+                        <p class="card-text">This Month</p>
+                    </div>
+                    <i class="fas fa-calendar fa-2x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Messages -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">
+            <i class="fas fa-list me-2"></i>All Contact Messages
+        </h5>
+        <div class="btn-group btn-group-sm">
+            <button class="btn btn-outline-primary" onclick="filterContacts('all')">All</button>
+            <button class="btn btn-outline-warning" onclick="filterContacts('unread')">Unread</button>
+            <button class="btn btn-outline-success" onclick="filterContacts('read')">Read</button>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        {% if contacts %}
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Status</th>
+                            <th>Name & Email</th>
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for contact in contacts %}
+                            <tr class="contact-row {{ 'table-warning' if not contact.is_read else '' }}" 
+                                data-status="{{ 'unread' if not contact.is_read else 'read' }}">
+                                <td>
+                                    {% if not contact.is_read %}
+                                        <span class="badge bg-warning">
+                                            <i class="fas fa-exclamation-circle me-1"></i>Unread
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check-circle me-1"></i>Read
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div>
+                                        <strong>{{ contact.name }}</strong>
+                                        <br>
+                                        <small class="text-muted">
+                                            <i class="fas fa-envelope me-1"></i>{{ contact.email }}
+                                        </small>
+                                        {% if contact.phone %}
+                                            <br>
+                                            <small class="text-muted">
+                                                <i class="fas fa-phone me-1"></i>{{ contact.phone }}
+                                            </small>
+                                        {% endif %}
+                                        {% if contact.company %}
+                                            <br>
+                                            <small class="text-muted">
+                                                <i class="fas fa-building me-1"></i>{{ contact.company }}
+                                            </small>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if contact.subject %}
+                                        <span class="badge bg-secondary">{{ contact.subject }}</span>
+                                    {% else %}
+                                        <span class="text-muted">No subject</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="message-preview" style="max-width: 300px;">
+                                        <p class="mb-1">{{ contact.message[:100] }}{% if contact.message|length > 100 %}...{% endif %}</p>
+                                        {% if contact.message|length > 100 %}
+                                            <button class="btn btn-link btn-sm p-0" onclick="showFullMessage('{{ contact.id }}', `{{ contact.message|replace('`', '\\`')|replace('\n', '\\n') }}`)">
+                                                Read more
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        {{ contact.created_at.strftime('%B %d, %Y') if contact.created_at else 'N/A' }}
+                                        <br>
+                                        {{ contact.created_at.strftime('%I:%M %p') if contact.created_at else '' }}
+                                    </small>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="mailto:{{ contact.email }}?subject=Re: {{ contact.subject or 'Your inquiry' }}" 
+                                           class="btn btn-outline-primary" title="Reply via Email">
+                                            <i class="fas fa-reply"></i>
+                                        </a>
+                                        
+                                        <form method="POST" action="{{ url_for('admin_contact_toggle_read', contact_id=contact.id) }}" 
+                                              class="d-inline">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                            <button type="submit" class="btn btn-outline-{{ 'success' if not contact.is_read else 'warning' }}" 
+                                                    title="{{ 'Mark as Read' if not contact.is_read else 'Mark as Unread' }}">
+                                                <i class="fas fa-{{ 'check' if not contact.is_read else 'undo' }}"></i>
+                                            </button>
+                                        </form>
+                                        
+                                        <form method="POST" action="{{ url_for('admin_contact_delete', contact_id=contact.id) }}" 
+                                              class="d-inline" data-confirm="Are you sure you want to delete this contact message? This action cannot be undone.">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                            <button type="submit" class="btn btn-outline-danger" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No contact messages yet</h5>
+                <p class="text-muted">When visitors submit the contact form, their messages will appear here</p>
+                <a href="{{ url_for('contact') }}" target="_blank" class="btn btn-primary">
+                    <i class="fas fa-external-link-alt me-2"></i>View Contact Form
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Message Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Full Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="fullMessageContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="replyButton">
+                    <i class="fas fa-reply me-2"></i>Reply via Email
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Form Preview -->
+<div class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">
+            <i class="fas fa-eye me-2"></i>Contact Form Preview
+        </h5>
+        <a href="{{ url_for('contact') }}" target="_blank" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-external-link-alt me-2"></i>View Live Form
+        </a>
+    </div>
+    <div class="card-body">
+        <p class="text-muted mb-3">This is how the contact form appears to visitors on your website</p>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="border rounded p-3 bg-light">
+                    <h6 class="mb-3">Contact Form Fields:</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <small class="text-muted">• Full Name (required)</small>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <small class="text-muted">• Email Address (required)</small>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <small class="text-muted">• Phone Number (optional)</small>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <small class="text-muted">• Company/Organization (optional)</small>
+                        </div>
+                        <div class="col-12 mb-2">
+                            <small class="text-muted">• Subject/Topic (dropdown)</small>
+                        </div>
+                        <div class="col-12 mb-2">
+                            <small class="text-muted">• Project Details (required)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border rounded p-3 bg-info text-white">
+                    <h6 class="mb-3">Contact Information Displayed:</h6>
+                    <small>• Email: hello@shishir.design</small><br>
+                    <small>• Phone: +1 (555) 123-4567</small><br>
+                    <small>• Response Time: Within 24 hours</small><br>
+                    <small>• Available for remote work worldwide</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Filter contacts
+    function filterContacts(status) {
+        const rows = document.querySelectorAll('.contact-row');
+        
+        rows.forEach(row => {
+            if (status === 'all') {
+                row.style.display = '';
+            } else {
+                const rowStatus = row.getAttribute('data-status');
+                row.style.display = rowStatus === status ? '' : 'none';
+            }
+        });
+        
+        // Update button states
+        document.querySelectorAll('.btn-group button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+    }
+    
+    // Show full message in modal
+    function showFullMessage(contactId, message, email = '') {
+        document.getElementById('fullMessageContent').innerHTML = 
+            '<div class="alert alert-light"><pre style="white-space: pre-wrap; font-family: inherit;">' + 
+            message.replace(/\\n/g, '\n') + '</pre></div>';
+        
+        // Set up reply button
+        document.getElementById('replyButton').onclick = function() {
+            window.open('mailto:' + email + '?subject=Re: Your inquiry');
+        };
+        
+        const modal = new bootstrap.Modal(document.getElementById('messageModal'));
+        modal.show();
+    }
+    
+    // Auto-refresh every 2 minutes to check for new messages
+    setInterval(function() {
+        // Only refresh if there are unread messages
+        const unreadCount = document.querySelectorAll('[data-status="unread"]').length;
+        if (unreadCount > 0) {
+            location.reload();
+        }
+    }, 120000);
+    
+    // Highlight unread messages
+    document.addEventListener('DOMContentLoaded', function() {
+        const unreadRows = document.querySelectorAll('[data-status="unread"]');
+        unreadRows.forEach(row => {
+            row.style.borderLeft = '4px solid #ffc107';
+        });
+    });
+</script>
+{% endblock %}

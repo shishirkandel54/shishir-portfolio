@@ -1,0 +1,392 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Settings - Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Site Settings</h1>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">General Settings</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.site_title.label(class="form-label") }}
+                                {{ form.site_title(class="form-control") }}
+                                {% if form.site_title.errors %}
+                                    <div class="text-danger small">{{ form.site_title.errors[0] }}</div>
+                                {% endif %}
+                                <div class="form-text">This appears in the browser title and header</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.contact_email.label(class="form-label") }}
+                                {{ form.contact_email(class="form-control") }}
+                                {% if form.contact_email.errors %}
+                                    <div class="text-danger small">{{ form.contact_email.errors[0] }}</div>
+                                {% endif %}
+                                <div class="form-text">Primary contact email address</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.site_description.label(class="form-label") }}
+                        {{ form.site_description(class="form-control", rows="3") }}
+                        {% if form.site_description.errors %}
+                            <div class="text-danger small">{{ form.site_description.errors[0] }}</div>
+                        {% endif %}
+                        <div class="form-text">Brief description of your site for search engines</div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <h6 class="mb-3">Hero Section Content</h6>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                {{ form.hero_title.label(class="form-label") }}
+                                {{ form.hero_title(class="form-control") }}
+                                {% if form.hero_title.errors %}
+                                    <div class="text-danger small">{{ form.hero_title.errors[0] }}</div>
+                                {% endif %}
+                                <div class="form-text">Main title displayed on the homepage hero section</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.hero_subtitle.label(class="form-label") }}
+                        {{ form.hero_subtitle(class="form-control", rows="3") }}
+                        {% if form.hero_subtitle.errors %}
+                            <div class="text-danger small">{{ form.hero_subtitle.errors[0] }}</div>
+                        {% endif %}
+                        <div class="form-text">Subtitle text below the main hero title</div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <h6 class="mb-3">About Section Content</h6>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                {{ form.about_title.label(class="form-label") }}
+                                {{ form.about_title(class="form-control") }}
+                                {% if form.about_title.errors %}
+                                    <div class="text-danger small">{{ form.about_title.errors[0] }}</div>
+                                {% endif %}
+                                <div class="form-text">Title for the about section</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.about_content.label(class="form-label") }}
+                        {{ form.about_content(class="form-control", rows="5") }}
+                        {% if form.about_content.errors %}
+                            <div class="text-danger small">{{ form.about_content.errors[0] }}</div>
+                        {% endif %}
+                        <div class="form-text">Main content for the about section</div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <h6 class="mb-3">Contact Information</h6>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.contact_phone.label(class="form-label") }}
+                                {{ form.contact_phone(class="form-control") }}
+                                {% if form.contact_phone.errors %}
+                                    <div class="text-danger small">{{ form.contact_phone.errors[0] }}</div>
+                                {% endif %}
+                                <div class="form-text">Phone number for contact display</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.contact_location.label(class="form-label") }}
+                                {{ form.contact_location(class="form-control") }}
+                                {% if form.contact_location.errors %}
+                                    <div class="text-danger small">{{ form.contact_location.errors[0] }}</div>
+                                {% endif %}
+                                <div class="form-text">Location for contact display</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <h6 class="mb-3">Social Media Links</h6>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.social_twitter.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fab fa-twitter text-info"></i>
+                                    </span>
+                                    {{ form.social_twitter(class="form-control", placeholder="https://twitter.com/username") }}
+                                </div>
+                                {% if form.social_twitter.errors %}
+                                    <div class="text-danger small">{{ form.social_twitter.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.social_linkedin.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fab fa-linkedin text-primary"></i>
+                                    </span>
+                                    {{ form.social_linkedin(class="form-control", placeholder="https://linkedin.com/in/username") }}
+                                </div>
+                                {% if form.social_linkedin.errors %}
+                                    <div class="text-danger small">{{ form.social_linkedin.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.social_github.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fab fa-github text-dark"></i>
+                                    </span>
+                                    {{ form.social_github(class="form-control", placeholder="https://github.com/username") }}
+                                </div>
+                                {% if form.social_github.errors %}
+                                    <div class="text-danger small">{{ form.social_github.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.social_instagram.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fab fa-instagram text-danger"></i>
+                                    </span>
+                                    {{ form.social_instagram(class="form-control", placeholder="https://instagram.com/username") }}
+                                </div>
+                                {% if form.social_instagram.errors %}
+                                    <div class="text-danger small">{{ form.social_instagram.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.social_facebook.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fab fa-facebook text-primary"></i>
+                                    </span>
+                                    {{ form.social_facebook(class="form-control", placeholder="https://facebook.com/username") }}
+                                </div>
+                                {% if form.social_facebook.errors %}
+                                    <div class="text-danger small">{{ form.social_facebook.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.social_behance.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fab fa-behance text-info"></i>
+                                    </span>
+                                    {{ form.social_behance(class="form-control", placeholder="https://behance.net/username") }}
+                                </div>
+                                {% if form.social_behance.errors %}
+                                    <div class="text-danger small">{{ form.social_behance.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>Save Settings
+                        </button>
+                        
+                        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('main.index') }}" class="btn btn-outline-primary" target="_blank">
+                        <i class="fas fa-external-link-alt me-2"></i>View Website
+                    </a>
+                    <a href="{{ url_for('admin.pages') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-file-alt me-2"></i>Manage Pages
+                    </a>
+                    <a href="{{ url_for('admin.contacts') }}" class="btn btn-outline-info">
+                        <i class="fas fa-envelope me-2"></i>View Contacts
+                    </a>
+                    <a href="{{ url_for('admin.analytics') }}" class="btn btn-outline-success">
+                        <i class="fas fa-chart-bar me-2"></i>View Analytics
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">System Information</h6>
+            </div>
+            <div class="card-body">
+                <div class="small">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Flask Version:</span>
+                        <span class="text-muted">{{ flask_version or 'Unknown' }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Database:</span>
+                        <span class="text-muted">SQLite/PostgreSQL</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Environment:</span>
+                        <span class="text-muted">{{ config.get('ENV', 'Unknown') }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Debug Mode:</span>
+                        <span class="badge bg-{{ 'warning' if config.get('DEBUG') else 'success' }}">
+                            {{ 'Enabled' if config.get('DEBUG') else 'Disabled' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">Tips & Guidelines</h6>
+            </div>
+            <div class="card-body">
+                <div class="small">
+                    <ul class="mb-0">
+                        <li class="mb-2">Keep your site title concise and descriptive</li>
+                        <li class="mb-2">Use full URLs for social media links</li>
+                        <li class="mb-2">Write an engaging site description for better SEO</li>
+                        <li class="mb-2">Test your social links to ensure they work</li>
+                        <li>Save changes regularly to avoid losing work</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Auto-save indicator
+let settingsChanged = false;
+
+document.querySelectorAll('input, textarea, select').forEach(function(element) {
+    element.addEventListener('change', function() {
+        settingsChanged = true;
+        showUnsavedChanges();
+    });
+});
+
+function showUnsavedChanges() {
+    const submitBtn = document.querySelector('button[type="submit"]');
+    if (submitBtn && settingsChanged) {
+        submitBtn.innerHTML = '<i class="fas fa-save me-1"></i>Save Settings <span class="badge bg-warning ms-2">*</span>';
+    }
+}
+
+// Warn before leaving with unsaved changes
+window.addEventListener('beforeunload', function(e) {
+    if (settingsChanged) {
+        e.preventDefault();
+        e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+        return e.returnValue;
+    }
+});
+
+// Clear unsaved changes flag when form is submitted
+document.querySelector('form').addEventListener('submit', function() {
+    settingsChanged = false;
+});
+
+// Validate social media URLs
+function validateUrl(input) {
+    const url = input.value.trim();
+    if (url && !url.match(/^https?:\/\/.+/)) {
+        input.setCustomValidity('Please enter a complete URL starting with http:// or https://');
+    } else {
+        input.setCustomValidity('');
+    }
+}
+
+// Add URL validation to social media fields
+document.querySelectorAll('input[id^="social_"]').forEach(function(input) {
+    input.addEventListener('blur', function() {
+        validateUrl(this);
+    });
+});
+
+// Preview social links
+function previewSocialLink(input) {
+    const url = input.value.trim();
+    if (url) {
+        const previewBtn = input.parentNode.parentNode.querySelector('.preview-btn');
+        if (previewBtn) {
+            previewBtn.href = url;
+            previewBtn.style.display = 'inline-block';
+        }
+    }
+}
+
+// Character counter for description
+const descriptionField = document.getElementById('site_description');
+if (descriptionField) {
+    const maxLength = 500;
+    const counter = document.createElement('div');
+    counter.className = 'form-text text-end mt-1';
+    descriptionField.parentNode.appendChild(counter);
+    
+    function updateCounter() {
+        const remaining = maxLength - descriptionField.value.length;
+        counter.innerHTML = `<span class="${remaining < 50 ? 'text-warning' : ''}">${descriptionField.value.length}/${maxLength}</span>`;
+    }
+    
+    descriptionField.addEventListener('input', updateCounter);
+    updateCounter();
+}
+</script>
+{% endblock %}

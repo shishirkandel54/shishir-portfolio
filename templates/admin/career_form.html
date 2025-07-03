@@ -1,0 +1,227 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} - Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ title }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('admin.careers') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Back to Career Paths
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">Career Path Details</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.title.label(class="form-label") }}
+                        {{ form.title(class="form-control") }}
+                        {% if form.title.errors %}
+                            <div class="text-danger small">{{ form.title.errors[0] }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.description.label(class="form-label") }}
+                        {{ form.description(class="form-control", rows="4") }}
+                        {% if form.description.errors %}
+                            <div class="text-danger small">{{ form.description.errors[0] }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.icon_class.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-icons"></i>
+                                    </span>
+                                    {{ form.icon_class(class="form-control", placeholder="e.g., fas fa-paint-brush") }}
+                                </div>
+                                {% if form.icon_class.errors %}
+                                    <div class="text-danger small">{{ form.icon_class.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.icon_color.label(class="form-label") }}
+                                {{ form.icon_color(class="form-control") }}
+                                {% if form.icon_color.errors %}
+                                    <div class="text-danger small">{{ form.icon_color.errors[0] }}</div>
+                                {% endif %}
+                                <small class="form-text text-muted">CSS gradient or color value</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.skills.label(class="form-label") }}
+                        {{ form.skills(class="form-control", rows="3") }}
+                        {% if form.skills.errors %}
+                            <div class="text-danger small">{{ form.skills.errors[0] }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted">Enter skills separated by commas</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.salary_range.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </span>
+                                    {{ form.salary_range(class="form-control", placeholder="e.g., $40,000 - $80,000") }}
+                                </div>
+                                {% if form.salary_range.errors %}
+                                    <div class="text-danger small">{{ form.salary_range.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.learning_time.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-clock"></i>
+                                    </span>
+                                    {{ form.learning_time(class="form-control", placeholder="e.g., 6-12 months") }}
+                                </div>
+                                {% if form.learning_time.errors %}
+                                    <div class="text-danger small">{{ form.learning_time.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.order_index.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-sort-numeric-up"></i>
+                                    </span>
+                                    {{ form.order_index(class="form-control") }}
+                                </div>
+                                {% if form.order_index.errors %}
+                                    <div class="text-danger small">{{ form.order_index.errors[0] }}</div>
+                                {% endif %}
+                                <small class="form-text text-muted">Lower numbers appear first</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3 d-flex align-items-center">
+                                <div class="form-check mt-4">
+                                    {{ form.is_active(class="form-check-input") }}
+                                    {{ form.is_active.label(class="form-check-label") }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ url_for('admin.careers') }}" class="btn btn-secondary">Cancel</a>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-info">Preview</h6>
+            </div>
+            <div class="card-body">
+                <div class="career-preview">
+                    <div class="text-center mb-3">
+                        <div id="preview-icon-container" style="width: 60px; height: 60px; border-radius: 12px; background: linear-gradient(135deg, #8b5cf6, #ec4899); margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                            <i id="preview-icon" class="fas fa-briefcase" style="color: white; font-size: 1.5rem;"></i>
+                        </div>
+                    </div>
+                    <h5 id="preview-title" class="text-center mb-2">Career Title</h5>
+                    <p id="preview-description" class="text-muted small">Career description will appear here...</p>
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="small"><strong>Salary:</strong></span>
+                            <span id="preview-salary" class="small text-muted">Not specified</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="small"><strong>Learning Time:</strong></span>
+                            <span id="preview-learning" class="small text-muted">Not specified</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-success">Icon Examples</h6>
+            </div>
+            <div class="card-body">
+                <small class="text-muted">
+                    <strong>Popular Career Icons:</strong><br>
+                    <code>fas fa-paint-brush</code> - Design<br>
+                    <code>fas fa-code</code> - Development<br>
+                    <code>fas fa-camera</code> - Photography<br>
+                    <code>fas fa-chart-line</code> - Marketing<br>
+                    <code>fas fa-pen-nib</code> - Writing<br>
+                    <code>fas fa-laptop-code</code> - Tech
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Live preview functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const titleInput = document.querySelector('input[name="title"]');
+    const descriptionInput = document.querySelector('textarea[name="description"]');
+    const iconInput = document.querySelector('input[name="icon_class"]');
+    const iconColorInput = document.querySelector('input[name="icon_color"]');
+    const salaryInput = document.querySelector('input[name="salary_range"]');
+    const learningInput = document.querySelector('input[name="learning_time"]');
+    
+    const previewTitle = document.getElementById('preview-title');
+    const previewDescription = document.getElementById('preview-description');
+    const previewIcon = document.getElementById('preview-icon');
+    const previewIconContainer = document.getElementById('preview-icon-container');
+    const previewSalary = document.getElementById('preview-salary');
+    const previewLearning = document.getElementById('preview-learning');
+    
+    function updatePreview() {
+        if (titleInput.value) previewTitle.textContent = titleInput.value;
+        if (descriptionInput.value) previewDescription.textContent = descriptionInput.value;
+        if (iconInput.value) previewIcon.className = iconInput.value;
+        if (iconColorInput.value) previewIconContainer.style.background = iconColorInput.value;
+        if (salaryInput.value) previewSalary.textContent = salaryInput.value;
+        if (learningInput.value) previewLearning.textContent = learningInput.value;
+    }
+    
+    titleInput.addEventListener('input', updatePreview);
+    descriptionInput.addEventListener('input', updatePreview);
+    iconInput.addEventListener('input', updatePreview);
+    iconColorInput.addEventListener('input', updatePreview);
+    salaryInput.addEventListener('input', updatePreview);
+    learningInput.addEventListener('input', updatePreview);
+    
+    // Initialize preview with current values
+    updatePreview();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ config.site_title or 'Shishir Kandel - Creative Graphic Designer' }}</title>
+    <meta name="description" content="{{ config.site_description or 'Creative Graphic Designer crafting exceptional visual experiences with modern design tools and creative solutions.' }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/Hc1gbSWK/sk-favicon.png">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #8b5cf6;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: #f1f5f9;
+        }
+
+        /* Dark Theme Styles */
+        .dark-theme {
+            background: #1a1a1a !important;
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .navbar {
+            background: rgba(26, 26, 26, 0.95) !important;
+        }
+
+        .dark-theme .nav-links a {
+            color: #cbd5e1 !important;
+        }
+
+        .dark-theme .nav-links a:hover {
+            color: #8b5cf6 !important;
+        }
+
+        .dark-theme .theme-toggle:hover {
+            background: #374151 !important;
+        }
+
+        .dark-theme .hero {
+            background: #1a1a1a !important;
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .hero h1,
+        .dark-theme .hero .name {
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .hero .subtitle {
+            color: #9ca3af !important;
+        }
+
+        .dark-theme #about {
+            background: #1f2937 !important;
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .section-title h2 {
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .about-content h3 {
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .about-content p {
+            color: #9ca3af !important;
+        }
+
+        .dark-theme .stat-card {
+            background: #374151 !important;
+            border-color: #4b5563 !important;
+        }
+
+        .dark-theme .stat-card h4 {
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .stat-card p {
+            color: #9ca3af !important;
+        }
+
+        .dark-theme .skills {
+            background: #1a1a1a !important;
+        }
+
+        .dark-theme .skill-category {
+            background: #374151 !important;
+            border-color: #4b5563 !important;
+        }
+
+        .dark-theme .skill-category h4 {
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .skill-item h5 {
+            color: #e5e5e5 !important;
+        }
+
+        #portfolio {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%) !important;
+        }
+
+        .dark-theme #portfolio {
+            background: #1f2937 !important;
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .portfolio-header h2 {
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .portfolio-header p {
+            color: #9ca3af !important;
+        }
+
+        .dark-theme .career-paths {
+            background: #1a1a1a !important;
+        }
+
+        .dark-theme .career-card {
+            background: #374151 !important;
+            border-color: #4b5563 !important;
+        }
+
+        .dark-theme .career-card h4 {
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .career-card p {
+            color: #9ca3af !important;
+        }
+
+        .dark-theme .contact {
+            background: #1f2937 !important;
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .contact-info h4 {
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .contact-info p {
+            color: #9ca3af !important;
+        }
+
+        .dark-theme .contact-detail h5 {
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .contact-detail p {
+            color: #9ca3af !important;
+        }
+
+        .dark-theme .contact-form h4 {
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .form-group label {
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .form-group input,
+        .dark-theme .form-group textarea {
+            background: #374151 !important;
+            border-color: #4b5563 !important;
+            color: #e5e5e5 !important;
+        }
+
+        .dark-theme .form-group input::placeholder,
+        .dark-theme .form-group textarea::placeholder {
+            color: #9ca3af !important;
+        }
+
+        .dark-theme .footer {
+            background: #111827 !important;
+            color: #9ca3af !important;
+        }
+
+        /* Mobile Navigation */
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 2rem;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                gap: 0.5rem;
+                z-index: 999;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+                display: flex !important;
+            }
+            
+            .nav-links a {
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                color: #1e293b !important;
+                font-weight: 500;
+                text-align: center;
+                border: 1px solid transparent;
+            }
+            
+            .nav-links a:hover {
+                background: #f8fafc;
+                color: #8b5cf6 !important;
+                border-color: #e2e8f0;
+            }
+
+            /* Dark theme mobile navigation */
+            .dark-theme .nav-links {
+                background: rgba(26, 26, 26, 0.98) !important;
+                border-bottom-color: #374151 !important;
+            }
+
+            .dark-theme .nav-links a {
+                color: #cbd5e1 !important;
+            }
+
+            .dark-theme .nav-links a:hover {
+                background: #374151 !important;
+                color: #8b5cf6 !important;
+                border-color: #4b5563 !important;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem 2rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%);
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-avatar {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .hero .name {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-secondary {
+            border: 2px solid #e2e8f0;
+            color: #64748b;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .btn-secondary:hover {
+            border-color: #8b5cf6;
+            color: #8b5cf6;
+            text-decoration: none;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 8px;
+            color: #64748b;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-links a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .social-links a.github:hover { color: #333; }
+        .social-links a.linkedin:hover { color: #0077b5; }
+        .social-links a.facebook:hover { color: #1877f2; }
+        .social-links a.behance:hover { color: #1769ff; }
+        .social-links a.instagram:hover { color: #e4405f; }
+
+        /* Section Styles */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(135deg, #ddd6fe, #e0e7ff);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8b5cf6;
+            font-size: 4rem;
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.1);
+        }
+
+        .about-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content p {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card h4 {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: #64748b;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Skills Section */
+        .skills {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%);
+            padding: 5rem 2rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-category {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .skill-category h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-items {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .skill-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .skill-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .skill-item i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-item h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        /* Career Section */
+        .career-paths {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%);
+            padding: 5rem 2rem;
+        }
+
+        .career-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .career-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .career-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .career-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .career-card h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .career-card p {
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-tag {
+            background: #f1f5f9;
+            color: #64748b;
+            padding: 0.3rem 0.8rem;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .salary-info {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .salary-range {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .learn-btn {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+
+        .learn-btn:hover {
+            transform: translateY(-1px);
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%);
+            padding: 5rem 2rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+            align-items: start;
+        }
+
+        .contact-info h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-info p {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .contact-details {
+            margin-bottom: 2rem;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-detail i {
+            width: 40px;
+            height: 40px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8b5cf6;
+            flex-shrink: 0;
+        }
+
+        .contact-detail div h5 {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .contact-detail div p {
+            color: #64748b;
+            margin: 0;
+            font-size: 0.85rem;
+        }
+
+        .contact-form {
+            width: 100%;
+        }
+
+        .contact-form h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #1e293b;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.875rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+            background: #f8fafc;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            background: white;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1e293b;
+            color: #94a3b8;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Alert Styles */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .about-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .skills-grid,
+            .career-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            section {
+                padding: 3rem 1rem;
+            }
+            
+            .hero {
+                padding: 5rem 1rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">SK</div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#career">Career</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-avatar">SK</div>
+            <h1>Hi, I'm <span class="name">Shishir Kandel</span></h1>
+            <p class="subtitle">Creative Graphic Designer crafting exceptional visual experiences with modern design tools and creative solutions</p>
+            
+            <div class="hero-buttons">
+                <a href="#career" class="btn-primary">View Career Roadmap</a>
+                <a href="#contact" class="btn-secondary">Get In Touch</a>
+            </div>
+            
+            <div class="social-links">
+                <a href="https://github.com/shishirkandel" class="github" target="_blank" rel="noopener" aria-label="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/shishirkandel/" class="linkedin" target="_blank" rel="noopener" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://www.facebook.com/shishir.kandel.772476" class="facebook" target="_blank" rel="noopener" aria-label="Facebook">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://www.behance.net/theshishirkandel" class="behance" target="_blank" rel="noopener" aria-label="Behance">
+                    <i class="fab fa-behance"></i>
+                </a>
+                <a href="https://www.instagram.com/the_shishir.kandel/" class="instagram" target="_blank" rel="noopener" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" style="background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%); padding: 5rem 2rem;">
+        <div class="section-title">
+            <h2>About Me</h2>
+            <div class="section-divider"></div>
+        </div>
+        
+        <div class="about-grid">
+            <div class="about-image">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="about-content">
+                <h3>Creative Graphic Designer</h3>
+                <p>I'm a passionate graphic designer with extensive experience in creating compelling visual content that communicates ideas effectively. My journey in design started with a love for art and creativity, which evolved into a professional pursuit of visual excellence and brand storytelling.</p>
+                <p>I specialize in Adobe Creative Suite, brand identity design, and digital marketing materials. When I'm not designing, you'll find me exploring new design trends, experimenting with different creative techniques, or learning business build their visual identity.</p>
+                
+                <div class="about-stats">
+                    <div class="stat-card">
+                        <h4>Experience</h4>
+                        <p>1+ Years</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Projects</h4>
+                        <p>20+ Designs</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Location</h4>
+                        <p>Bharatpur, Nepal</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Availability</h4>
+                        <p>Open to Work</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills" id="skills">
+        <div class="container" style="max-width: 1400px; margin: 0 auto;">
+            <div class="section-title">
+                <h2>Design Skills & Tools</h2>
+                <div class="section-divider"></div>
+                <p>I work with industry-leading design tools to create stunning visual experiences</p>
+            </div>
+            
+            <div class="skills-grid">
+            <div class="skill-category">
+                <h4>Design Software</h4>
+                <div class="skill-items">
+                    <div class="skill-item">
+                        <i class="fab fa-adobe" style="color: #ff0000;"></i>
+                        <h5>Adobe Photoshop</h5>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fab fa-adobe" style="color: #ff9a00;"></i>
+                        <h5>Adobe Illustrator</h5>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fab fa-adobe" style="color: #9999ff;"></i>
+                        <h5>Adobe Premiere</h5>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-palette" style="color: #00c4cc;"></i>
+                        <h5>Canva</h5>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <h4>Design Specializations</h4>
+                <div class="skill-items">
+                    <div class="skill-item">
+                        <i class="fas fa-paint-brush" style="color: #e91e63;"></i>
+                        <h5>Brand Design</h5>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-bullhorn" style="color: #4caf50;"></i>
+                        <h5>Marketing Materials</h5>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-mobile-alt" style="color: #2196f3;"></i>
+                        <h5>Social Media Design</h5>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-print" style="color: #ff5722;"></i>
+                        <h5>Print Design</h5>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <h4>Additional Skills</h4>
+                <div class="skill-items">
+                    <div class="skill-item">
+                        <i class="fas fa-camera" style="color: #9c27b0;"></i>
+                        <h5>Photo Editing</h5>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-video" style="color: #607d8b;"></i>
+                        <h5>Video Editing</h5>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-font" style="color: #795548;"></i>
+                        <h5>Typography</h5>
+                    </div>
+                    <div class="skill-item">
+                        <i class="fas fa-eye-dropper" style="color: #ffc107;"></i>
+                        <h5>Color Theory</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" style="background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%); color: #333; padding: 5rem 2rem;">
+        <div class="container" style="max-width: 1400px; margin: 0 auto;">
+            <div class="portfolio-header" style="text-align: center; margin-bottom: 4rem;">
+                <h2 style="font-size: 2.5rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">
+                    OUR CREATIVE PORTFOLIO
+                </h2>
+                <div style="width: 60px; height: 4px; background: linear-gradient(135deg, #8b5cf6, #ec4899); margin: 0 auto 2rem;"></div>
+                <p style="font-size: 1.1rem; color: #64748b; max-width: 800px; margin: 0 auto; line-height: 1.6;">
+                    SHOWCASING OUR EXPERTISE IN DESIGN AND INNOVATION
+                </p>
+                <p style="font-size: 1rem; color: #64748b; max-width: 900px; margin: 2rem auto 0; line-height: 1.6;">
+                    EXPLORE OUR PORTFOLIO TO SEE THE WIDE RANGE OF PROJECTS WE'VE BROUGHT TO LIFE. FROM GRAPHIC AND UI/UX DESIGN TO BRANDING AND SOCIAL MEDIA, OUR CREATIVE TEAM DELIVERS EXCEPTIONAL RESULTS TAILORED TO EACH CLIENT'S UNIQUE NEEDS.
+                </p>
+            </div>
+            
+            <div class="portfolio-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem;">
+                {% if portfolio_items %}
+                    {% for portfolio in portfolio_items[:9] %}
+                        <div class="portfolio-item" style="position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 12px; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;" 
+                             onclick="openPortfolioModal({{ portfolio.id }}, '{{ portfolio.title }}', '{{ portfolio.description }}', '{{ portfolio.image_url }}', '{{ portfolio.category }}', '{{ portfolio.tags }}', '{{ portfolio.project_url or '' }}')">
+                            
+                            {% if portfolio.image_url %}
+                                <img src="{{ portfolio.image_url }}" alt="{{ portfolio.title }}" 
+                                     style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+                            {% else %}
+                                <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #333, #555); display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-image" style="font-size: 3rem; color: #888;"></i>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="portfolio-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8)); opacity: 0; transition: opacity 0.3s ease; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem;">
+                                <h4 style="color: white; font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem;">{{ portfolio.title }}</h4>
+                                <p style="color: #e0e0e0; font-size: 0.9rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">{{ portfolio.category.replace('-', ' ') if portfolio.category else 'DESIGN PROJECT' }}</p>
+                                {% if portfolio.tags %}
+                                    <div class="portfolio-tags">
+                                        {% for tag in portfolio.tag_list[:2] %}
+                                            <span style="background: rgba(139, 92, 246, 0.8); color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.7rem; margin-right: 0.5rem; text-transform: uppercase;">{{ tag }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    
+                    <!-- Fill remaining slots if less than 9 items -->
+                    {% for i in range(portfolio_items|length, 9) %}
+                        <div class="portfolio-item empty-slot" style="aspect-ratio: 1; border: 2px dashed #444; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: border-color 0.3s ease;">
+                            <i class="fas fa-plus" style="font-size: 2rem; color: #666; margin-bottom: 1rem;"></i>
+                            <p style="color: #888; font-size: 0.9rem; margin: 0;">Add Design</p>
+                            <p style="color: #666; font-size: 0.8rem; margin: 0.25rem 0 0;">Slot {{ i + 1 }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Show 9 empty slots when no portfolio items exist -->
+                    {% for i in range(9) %}
+                        <div class="portfolio-item empty-slot" style="aspect-ratio: 1; border: 2px dashed #444; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: border-color 0.3s ease;">
+                            <i class="fas fa-plus" style="font-size: 2rem; color: #666; margin-bottom: 1rem;"></i>
+                            <p style="color: #888; font-size: 0.9rem; margin: 0;">Add Design</p>
+                            <p style="color: #666; font-size: 0.8rem; margin: 0.25rem 0 0;">Slot {{ i + 1 }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            
+            {% if portfolio_items and portfolio_items|length > 9 %}
+                <div style="text-align: center; margin-top: 3rem;">
+                    <a href="/portfolio" class="btn-primary" style="display: inline-block;">View All Projects</a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Portfolio Modal -->
+    <div id="portfolioModal" class="modal" style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); overflow: auto;">
+        <div class="modal-content" style="margin: 2% auto; padding: 0; width: 90%; max-width: 1000px; position: relative; background: white; border-radius: 12px; overflow: hidden;">
+            <span class="close" onclick="closePortfolioModal()" style="position: absolute; top: 1rem; right: 1.5rem; color: white; font-size: 2rem; font-weight: bold; cursor: pointer; z-index: 10; background: rgba(0,0,0,0.5); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&times;</span>
+            
+            <div id="modalImage" style="width: 100%; height: 400px; background-size: cover; background-position: center; position: relative;">
+                <!-- Image will be set as background -->
+            </div>
+            
+            <div style="padding: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1.5rem;">
+                    <div>
+                        <h3 id="modalTitle" style="color: #1e293b; font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem;"></h3>
+                        <p id="modalCategory" style="color: #8b5cf6; font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin: 0;"></p>
+                    </div>
+                    <div id="modalProjectLink" style="display: none;">
+                        <a href="#" target="_blank" class="btn-secondary" style="font-size: 0.9rem;">
+                            <i class="fas fa-external-link-alt me-1"></i>View Project
+                        </a>
+                    </div>
+                </div>
+                
+                <p id="modalDescription" style="color: #64748b; line-height: 1.6; margin-bottom: 1.5rem; font-size: 1rem;"></p>
+                
+                <div id="modalTags" style="margin-bottom: 1.5rem;">
+                    <!-- Tags will be populated here -->
+                </div>
+                
+                <div style="border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
+                    <h5 style="color: #1e293b; margin-bottom: 1rem;">Project Details</h5>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div>
+                            <strong style="color: #1e293b;">Category:</strong>
+                            <span id="modalCategoryDetail" style="color: #64748b;"></span>
+                        </div>
+                        <div>
+                            <strong style="color: #1e293b;">Tools Used:</strong>
+                            <span id="modalTools" style="color: #64748b;"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Career Section -->
+    <section id="career" class="career-paths">
+        <div class="container" style="max-width: 1400px; margin: 0 auto;">
+            <div class="section-title">
+                <h2>Career Opportunities in Nepal</h2>
+                <div class="section-divider"></div>
+                <p>Explore different career paths in technology and digital fields with growth opportunities in Nepal</p>
+            </div>
+            
+            <div class="career-grid">
+            <div class="career-card">
+                <div class="career-icon" style="background: linear-gradient(135deg, #e91e63, #ad1457);">
+                    <i class="fas fa-paint-brush"></i>
+                </div>
+                <h4>Graphic Design</h4>
+                <p>Create visual content for digital and print media, including logos, brochures, advertisements, and brand identity materials.</p>
+                <div class="skills-tags">
+                    <span class="skill-tag">Photoshop</span>
+                    <span class="skill-tag">Illustrator</span>
+                    <span class="skill-tag">InDesign</span>
+                    <span class="skill-tag">Typography</span>
+                    <span class="skill-tag">Color Theory</span>
+                    <span class="skill-tag">Branding</span>
+                </div>
+                <div class="salary-info">
+                    <div class="salary-range">Rs 25,000 - 60,000/month</div>
+                    <div style="font-size: 0.8rem; color: #64748b;">6-12 months</div>
+                </div>
+                <a href="#contact" class="learn-btn">Learn More</a>
+            </div>
+            
+            <div class="career-card">
+                <div class="career-icon" style="background: linear-gradient(135deg, #f44336, #d32f2f);">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h4>Cyber Security</h4>
+                <p>Protect organizations from digital threats by implementing security measures, monitoring networks, and responding to incidents.</p>
+                <div class="skills-tags">
+                    <span class="skill-tag">Network Security</span>
+                    <span class="skill-tag">Ethical Hacking</span>
+                    <span class="skill-tag">Risk Assessment</span>
+                    <span class="skill-tag">Incident Response</span>
+                    <span class="skill-tag">Compliance</span>
+                </div>
+                <div class="salary-info">
+                    <div class="salary-range">Rs 45,000 - 120,000/month</div>
+                    <div style="font-size: 0.8rem; color: #64748b;">12-18 months</div>
+                </div>
+                <a href="#contact" class="learn-btn">Learn More</a>
+            </div>
+            
+            <div class="career-card">
+                <div class="career-icon" style="background: linear-gradient(135deg, #2196f3, #1976d2);">
+                    <i class="fas fa-network-wired"></i>
+                </div>
+                <h4>Networking</h4>
+                <p>Design, implement, and maintain network infrastructures to ensure reliable connectivity and communication within organizations.</p>
+                <div class="skills-tags">
+                    <span class="skill-tag">CCNA</span>
+                    <span class="skill-tag">Routing</span>
+                    <span class="skill-tag">Switching</span>
+                    <span class="skill-tag">Network Protocols</span>
+                    <span class="skill-tag">Troubleshooting</span>
+                    <span class="skill-tag">Security</span>
+                </div>
+                <div class="salary-info">
+                    <div class="salary-range">Rs 35,000 - 90,000/month</div>
+                    <div style="font-size: 0.8rem; color: #64748b;">6-15 months</div>
+                </div>
+                <a href="#contact" class="learn-btn">Learn More</a>
+            </div>
+            
+            <div class="career-card">
+                <div class="career-icon" style="background: linear-gradient(135deg, #ff9800, #f57c00);">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <h4>Digital Marketing</h4>
+                <p>Promote products and services through digital channels, including social media, search engines, and online advertising.</p>
+                <div class="skills-tags">
+                    <span class="skill-tag">SEO</span>
+                    <span class="skill-tag">Social Media</span>
+                    <span class="skill-tag">Analytics</span>
+                    <span class="skill-tag">Content Marketing</span>
+                    <span class="skill-tag">Google Ads</span>
+                    <span class="skill-tag">Email Marketing</span>
+                </div>
+                <div class="salary-info">
+                    <div class="salary-range">Rs 30,000 - 70,000/month</div>
+                    <div style="font-size: 0.8rem; color: #64748b;">4-8 months</div>
+                </div>
+                <a href="#contact" class="learn-btn">Learn More</a>
+            </div>
+            
+            <div class="career-card">
+                <div class="career-icon" style="background: linear-gradient(135deg, #4caf50, #388e3c);">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h4>Web Development</h4>
+                <p>Build and maintain websites and web applications using programming languages and modern development frameworks.</p>
+                <div class="skills-tags">
+                    <span class="skill-tag">HTML/CSS</span>
+                    <span class="skill-tag">JavaScript</span>
+                    <span class="skill-tag">React</span>
+                    <span class="skill-tag">Node.js</span>
+                    <span class="skill-tag">Databases</span>
+                    <span class="skill-tag">Git</span>
+                </div>
+                <div class="salary-info">
+                    <div class="salary-range">Rs 35,000 - 100,000/month</div>
+                    <div style="font-size: 0.8rem; color: #64748b;">10-18 months</div>
+                </div>
+                <a href="#contact" class="learn-btn">Learn More</a>
+            </div>
+            
+            <div class="career-card">
+                <div class="career-icon" style="background: linear-gradient(135deg, #9c27b0, #7b1fa2);">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h4>Data Science</h4>
+                <p>Analyze large datasets to extract insights and help organizations make data-driven decisions using statistical methods and machine learning.</p>
+                <div class="skills-tags">
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Statistics</span>
+                    <span class="skill-tag">Machine Learning</span>
+                    <span class="skill-tag">SQL</span>
+                    <span class="skill-tag">Data Visualization</span>
+                    <span class="skill-tag">Excel</span>
+                </div>
+                <div class="salary-info">
+                    <div class="salary-range">Rs 45,000 - 150,000/month</div>
+                    <div style="font-size: 0.8rem; color: #64748b;">12-24 months</div>
+                </div>
+                <a href="#contact" class="learn-btn">Learn More</a>
+            </div>
+        </div>
+        
+            <div style="text-align: center; margin-top: 3rem;">
+                <h3 style="color: #1e293b; margin-bottom: 1rem;">Ready to Start Your Journey?</h3>
+                <p style="color: #64748b; margin-bottom: 2rem;">Choose a career path that aligns with your interests and start building your skills today!</p>
+                <a href="#contact" class="btn-primary">Get Career Guidance</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container" style="max-width: 1400px; margin: 0 auto;">
+            <div class="section-title">
+                <h2>Get In Touch</h2>
+                <div class="section-divider"></div>
+                <p style="text-align: center;">I'm always open to discussing new opportunities and interesting projects</p>
+            </div>
+            
+            <div class="contact-grid">
+            <div class="contact-info">
+                <h4>Let's Connect</h4>
+                <p>Whether you have a project in mind, want to collaborate, or just want to say hello, I'd love to hear from you. Let's create something amazing together!</p>
+                
+                <div class="contact-details">
+                    <div class="contact-detail">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h5>Email</h5>
+                            <p>info.hubcreative@gmail.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-detail">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h5>Phone</h5>
+                            <p>+977 9848000000</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-detail">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h5>Location</h5>
+                            <p>Bharatpur, Nepal</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h5 style="margin: 2rem 0 1rem 0; color: #1e293b; text-align: left;">Follow Me</h5>
+                <div class="social-links" style="justify-content: flex-start;">
+                    <a href="https://github.com/shishirkandel" class="github" target="_blank" rel="noopener" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/shishirkandel/" class="linkedin" target="_blank" rel="noopener" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://www.facebook.com/shishir.kandel.772476" class="facebook" target="_blank" rel="noopener" aria-label="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.behance.net/theshishirkandel" class="behance" target="_blank" rel="noopener" aria-label="Behance">
+                        <i class="fab fa-behance"></i>
+                    </a>
+                    <a href="https://www.instagram.com/the_shishir.kandel/" class="instagram" target="_blank" rel="noopener" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <h4>Send Message</h4>
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'success' if category == 'success' else 'error' }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <form method="POST" action="{{ url_for('main.contact') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="you@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="Project Discussion">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Tell me about your project..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary" style="width: 100%;">Send Message</button>
+                </form>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Shishir Kandel. All rights reserved. | Design & Development by Shishir Kandel</p>
+    </footer>
+
+    <script>
+        // Mobile Navigation Toggle
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        navToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            const icon = this.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.className = 'fas fa-times';
+            } else {
+                icon.className = 'fas fa-bars';
+            }
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+                navToggle.querySelector('i').className = 'fas fa-bars';
+            });
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
+                navToggle.querySelector('i').className = 'fas fa-bars';
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+            }
+        });
+
+        // Theme toggle functionality
+        const themeToggle = document.querySelector('.theme-toggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-theme');
+            
+            if (document.body.classList.contains('dark-theme')) {
+                themeIcon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            themeIcon.className = 'fas fa-sun';
+        }
+
+        // Form submission feedback with success popup
+        const contactForm = document.querySelector('.contact-form form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                submitBtn.disabled = true;
+
+                // Create FormData object
+                const formData = new FormData(this);
+                
+                // Submit via fetch for better UX
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    // Show success popup
+                    showSuccessPopup('Message sent successfully! Thank you for contacting us.');
+                    // Reset form
+                    this.reset();
+                    // Reset button
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showErrorPopup('There was an error sending your message. Please try again.');
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                });
+            });
+        }
+
+        // Success popup function
+        function showSuccessPopup(message) {
+            const popup = document.createElement('div');
+            popup.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 2rem;
+                border-radius: 12px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                z-index: 10000;
+                text-align: center;
+                max-width: 400px;
+                width: 90%;
+            `;
+            
+            popup.innerHTML = `
+                <div style="color: #10b981; font-size: 3rem; margin-bottom: 1rem;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 style="color: #1e293b; margin-bottom: 0.5rem;">Success!</h3>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">${message}</p>
+                <button onclick="this.parentElement.remove()" style="background: #8b5cf6; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer;">
+                    Close
+                </button>
+            `;
+            
+            // Add backdrop
+            const backdrop = document.createElement('div');
+            backdrop.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 9999;
+            `;
+            
+            document.body.appendChild(backdrop);
+            document.body.appendChild(popup);
+            
+            // Remove after 5 seconds or on backdrop click
+            setTimeout(() => {
+                if (popup.parentElement) popup.remove();
+                if (backdrop.parentElement) backdrop.remove();
+            }, 5000);
+            
+            backdrop.addEventListener('click', () => {
+                popup.remove();
+                backdrop.remove();
+            });
+        }
+
+        // Error popup function
+        function showErrorPopup(message) {
+            const popup = document.createElement('div');
+            popup.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 2rem;
+                border-radius: 12px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                z-index: 10000;
+                text-align: center;
+                max-width: 400px;
+                width: 90%;
+            `;
+            
+            popup.innerHTML = `
+                <div style="color: #ef4444; font-size: 3rem; margin-bottom: 1rem;">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <h3 style="color: #1e293b; margin-bottom: 0.5rem;">Error</h3>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">${message}</p>
+                <button onclick="this.parentElement.remove()" style="background: #ef4444; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer;">
+                    Close
+                </button>
+            `;
+            
+            document.body.appendChild(popup);
+            
+            setTimeout(() => {
+                if (popup.parentElement) popup.remove();
+            }, 5000);
+        }
+
+        // Auto-hide alerts
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                alert.style.opacity = '0';
+                alert.style.transform = 'translateY(-10px)';
+                setTimeout(() => alert.remove(), 300);
+            });
+        }, 5000);
+
+        // Portfolio functionality
+        function openPortfolioModal(id, title, description, imageUrl, category, tags, projectUrl) {
+            const modal = document.getElementById('portfolioModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalCategory = document.getElementById('modalCategory');
+            const modalDescription = document.getElementById('modalDescription');
+            const modalTags = document.getElementById('modalTags');
+            const modalCategoryDetail = document.getElementById('modalCategoryDetail');
+            const modalTools = document.getElementById('modalTools');
+            const modalProjectLink = document.getElementById('modalProjectLink');
+            
+            // Set content
+            modalTitle.textContent = title;
+            modalCategory.textContent = category ? category.replace('-', ' ').toUpperCase() : 'DESIGN PROJECT';
+            modalDescription.textContent = description || 'A creative design project showcasing innovative visual solutions.';
+            modalCategoryDetail.textContent = category ? 
+                category.replace('-', ' ').split(' ').map(word => 
+                    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                ).join(' ') : 'Graphic Design';
+            
+            // Set image
+            if (imageUrl && imageUrl !== 'None') {
+                modalImage.style.backgroundImage = `url(${imageUrl})`;
+            } else {
+                modalImage.style.backgroundImage = 'linear-gradient(135deg, #333, #555)';
+            }
+            
+            // Set tags
+            if (tags && tags !== 'None') {
+                const tagList = tags.split(',').map(tag => tag.trim());
+                modalTags.innerHTML = tagList.map(tag => 
+                    `<span style="background: #f1f5f9; color: #64748b; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; margin-right: 0.5rem; display: inline-block; margin-bottom: 0.5rem;">${tag}</span>`
+                ).join('');
+                modalTools.textContent = tagList.slice(0, 3).join(', ');
+            } else {
+                modalTags.innerHTML = '<span style="color: #888;">No tags specified</span>';
+                modalTools.textContent = 'Creative Software';
+            }
+            
+            // Set project link
+            if (projectUrl && projectUrl !== 'None' && projectUrl !== '') {
+                modalProjectLink.style.display = 'block';
+                modalProjectLink.querySelector('a').href = projectUrl;
+            } else {
+                modalProjectLink.style.display = 'none';
+            }
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePortfolioModal() {
+            const modal = document.getElementById('portfolioModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('portfolioModal');
+            if (event.target === modal) {
+                closePortfolioModal();
+            }
+        }
+
+        // Portfolio hover effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const portfolioItems = document.querySelectorAll('.portfolio-item:not(.empty-slot)');
+            
+            portfolioItems.forEach(item => {
+                const overlay = item.querySelector('.portfolio-overlay');
+                const image = item.querySelector('img');
+                
+                item.addEventListener('mouseenter', function() {
+                    if (overlay) overlay.style.opacity = '1';
+                    if (image) image.style.transform = 'scale(1.05)';
+                    this.style.transform = 'translateY(-8px)';
+                    this.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    if (overlay) overlay.style.opacity = '0';
+                    if (image) image.style.transform = 'scale(1)';
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+
+            // Empty slot hover effects
+            const emptySlots = document.querySelectorAll('.empty-slot');
+            emptySlots.forEach(slot => {
+                slot.addEventListener('mouseenter', function() {
+                    this.style.borderColor = '#8b5cf6';
+                    this.style.backgroundColor = 'rgba(139, 92, 246, 0.05)';
+                });
+                
+                slot.addEventListener('mouseleave', function() {
+                    this.style.borderColor = '#444';
+                    this.style.backgroundColor = 'transparent';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

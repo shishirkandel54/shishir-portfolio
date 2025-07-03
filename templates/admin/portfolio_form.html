@@ -1,0 +1,250 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} - Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ title }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{{ url_for('admin.portfolio') }}" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Back to Portfolio
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    
+                    <div class="mb-3">
+                        {{ form.title.label(class="form-label") }}
+                        {{ form.title(class="form-control") }}
+                        {% if form.title.errors %}
+                            <div class="text-danger small">{{ form.title.errors[0] }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.description.label(class="form-label") }}
+                        {{ form.description(class="form-control", rows="4", placeholder="Describe your project, the tools used, and the design process...") }}
+                        {% if form.description.errors %}
+                            <div class="text-danger small">{{ form.description.errors[0] }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.image_url.label(class="form-label") }}
+                                {{ form.image_url(class="form-control", placeholder="https://example.com/image.jpg") }}
+                                {% if form.image_url.errors %}
+                                    <div class="text-danger small">{{ form.image_url.errors[0] }}</div>
+                                {% endif %}
+                                <div class="form-text">Paste a direct image URL here</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.image_file.label(class="form-label") }}
+                                {{ form.image_file(class="form-control") }}
+                                {% if form.image_file.errors %}
+                                    <div class="text-danger small">{{ form.image_file.errors[0] }}</div>
+                                {% endif %}
+                                <div class="form-text">Or upload an image file directly (JPG, PNG, GIF)</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.project_url.label(class="form-label") }}
+                                {{ form.project_url(class="form-control", placeholder="https://example.com/project") }}
+                                {% if form.project_url.errors %}
+                                    <div class="text-danger small">{{ form.project_url.errors[0] }}</div>
+                                {% endif %}
+                                <div class="form-text">Optional: Link to live project or detailed case study</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.category.label(class="form-label") }}
+                                {{ form.category(class="form-select") }}
+                                {% if form.category.errors %}
+                                    <div class="text-danger small">{{ form.category.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.order_index.label(class="form-label") }}
+                                {{ form.order_index(class="form-control", placeholder="0") }}
+                                {% if form.order_index.errors %}
+                                    <div class="text-danger small">{{ form.order_index.errors[0] }}</div>
+                                {% endif %}
+                                <div class="form-text">Lower numbers appear first (0 = first)</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.tags.label(class="form-label") }}
+                        {{ form.tags(class="form-control", placeholder="photoshop, logo design, branding, social media") }}
+                        {% if form.tags.errors %}
+                            <div class="text-danger small">{{ form.tags.errors[0] }}</div>
+                        {% endif %}
+                        <div class="form-text">Separate tags with commas (e.g., photoshop, illustrator, logo design)</div>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        {{ form.is_featured(class="form-check-input") }}
+                        {{ form.is_featured.label(class="form-check-label") }}
+                        <div class="form-text">Featured projects appear prominently on the homepage</div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>Save Project
+                        </button>
+                        
+                        <a href="{{ url_for('admin.portfolio') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold">Project Preview</h6>
+            </div>
+            <div class="card-body">
+                <div id="image-preview" class="mb-3">
+                    {% if portfolio and portfolio.image_url %}
+                        <img src="{{ portfolio.image_url }}" class="img-fluid rounded" alt="Project preview" style="max-height: 200px; width: 100%; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-image fa-2x text-muted"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="small text-muted">
+                    <strong>Tips for great portfolio projects:</strong>
+                    <ul class="mt-2 mb-0">
+                        <li>Use high-quality images (min 800px width)</li>
+                        <li>Show before/after comparisons</li>
+                        <li>Include design process screenshots</li>
+                        <li>Highlight unique design elements</li>
+                        <li>Add context about the client/purpose</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold">Image Upload Guide</h6>
+            </div>
+            <div class="card-body small">
+                <p><strong>Recommended Image Hosts:</strong></p>
+                <ul>
+                    <li><a href="https://postimg.cc" target="_blank">PostImage</a> - Free, no account needed</li>
+                    <li><a href="https://imgur.com" target="_blank">Imgur</a> - Popular, reliable</li>
+                    <li><a href="https://drive.google.com" target="_blank">Google Drive</a> - Use sharing link</li>
+                </ul>
+                
+                <p class="mt-3"><strong>Steps:</strong></p>
+                <ol class="small">
+                    <li>Upload your image to any host</li>
+                    <li>Copy the direct image URL</li>
+                    <li>Paste it in the "Image URL" field</li>
+                    <li>The preview will show automatically</li>
+                </ol>
+            </div>
+        </div>
+        
+        {% if portfolio %}
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold">Project Info</h6>
+            </div>
+            <div class="card-body small text-muted">
+                <div><strong>Created:</strong> {{ portfolio.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+                <div><strong>Last Updated:</strong> {{ portfolio.updated_at.strftime('%Y-%m-%d %H:%M') }}</div>
+                <div><strong>Featured:</strong> {{ 'Yes' if portfolio.is_featured else 'No' }}</div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Auto-preview image when URL is entered
+document.getElementById('image_url').addEventListener('input', function() {
+    const url = this.value;
+    const preview = document.getElementById('image-preview');
+    
+    if (url && url.includes('http')) {
+        const img = document.createElement('img');
+        img.src = url;
+        img.className = 'img-fluid rounded';
+        img.style.cssText = 'max-height: 200px; width: 100%; object-fit: cover;';
+        img.alt = 'Project preview';
+        
+        img.onload = function() {
+            preview.innerHTML = '';
+            preview.appendChild(img);
+        };
+        
+        img.onerror = function() {
+            preview.innerHTML = '<div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 200px;"><div class="text-center text-muted"><i class="fas fa-exclamation-triangle fa-2x mb-2"></i><br>Invalid image URL</div></div>';
+        };
+    } else if (!url) {
+        preview.innerHTML = '<div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 200px;"><i class="fas fa-image fa-2x text-muted"></i></div>';
+    }
+});
+
+// Auto-generate tags from title and category
+document.getElementById('title').addEventListener('input', updateSuggestedTags);
+document.getElementById('category').addEventListener('change', updateSuggestedTags);
+
+function updateSuggestedTags() {
+    const title = document.getElementById('title').value.toLowerCase();
+    const category = document.getElementById('category').value;
+    const tagsField = document.getElementById('tags');
+    
+    if (!tagsField.value && title) {
+        let suggestedTags = [];
+        
+        // Add category-based tags
+        if (category === 'graphic-design') suggestedTags.push('graphic design', 'visual design');
+        if (category === 'branding') suggestedTags.push('branding', 'logo design', 'brand identity');
+        if (category === 'print-design') suggestedTags.push('print design', 'layout');
+        if (category === 'social-media') suggestedTags.push('social media', 'digital marketing');
+        if (category === 'web-design') suggestedTags.push('web design', 'ui design');
+        
+        // Add common design tool tags
+        if (title.includes('logo')) suggestedTags.push('logo design');
+        if (title.includes('poster')) suggestedTags.push('poster design');
+        if (title.includes('website')) suggestedTags.push('web design');
+        
+        // Add common software tags
+        suggestedTags.push('photoshop', 'illustrator');
+        
+        if (suggestedTags.length > 0) {
+            tagsField.placeholder = 'Suggested: ' + suggestedTags.slice(0, 4).join(', ');
+        }
+    }
+}
+</script>
+{% endblock %}
